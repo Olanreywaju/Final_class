@@ -7,10 +7,10 @@ const storage = multer.diskStorage({
 },
 
 filename: (req, file, cb) => {
-    console.log("File", file);
-    const uniqueSuffix = `${Date.now()}_${$Math.round(Math.random() * 1E9)}`;
+    // console.log("File", file);
+    const uniqueSuffix = `${Date.now()}_${Math.round(Math.random() * 1E9)}`;
     const ext = file.mimetype.split('/')[1];
-    cb(null, `IMG_${uniqueSuffix}.${text}`)
+    cb(null, `IMG_${uniqueSuffix}.${ext}`)
 }
 });
 

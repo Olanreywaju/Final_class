@@ -1,21 +1,45 @@
 const userModel = require('../models/userModel');
+const cloudinary = require('../config/cloudinary')
 const bcrypt = require('bcrypt');
+const express = require('express');
+const fs = require('fs');
 
 exports.register = async (req, res) => {
     try {
         const {fullName, email, password, age, phoneNumber} = req.body;
-
+        const file = req.file;
+        let response;
         const exisistingEmail = await userModel.findOne({email})
         const existingPhoneNumber = await userModel.findOne({phoneNumber})
+        
         if (exisistingEmail || existingPhoneNumber) {
-           return res.status(400).json({message: 'User already exist'})
-        }
+            fs.unlinkSync(file.path)
+           return res.status(400).json({
+            message: 'User already exist'})
+        };
+
+        if (file && file.path) {
+            response = await cloudinary.uploader.upload(file.path);
+            console.log(response);
+            
+            fs.unlinkSync(file.path)
+        };
         const saltRound = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(password, saltRound);
 
         const user = await userModel.create({
-            fullName, email, password: hashPassword, age, phoneNumber
+            fullName, 
+            email, 
+            password: hashPassword, 
+            age, 
+            phoneNumber,
+            profilePicture: {
+                publicId: response.public_id,
+                imageUrl: response.secure_url
+            }
         });
+
+        await user.save()
         res.status(201).json({
             message: 'User registered successfully', 
             data:user

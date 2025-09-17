@@ -28,6 +28,9 @@
     profilePicture: {
         imageUrl: {
             type: String
+        },
+        publicId: {
+            type: String
         }
     },
 
