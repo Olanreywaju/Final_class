@@ -33,6 +33,14 @@
             type: String
         }
     },
+    isVerified: {
+        type: Boolean,
+        default: false
+    }, 
+    // token: {
+    //     type: String,
+    //     required: true
+    // }
 
  }, {
     timestamps: true

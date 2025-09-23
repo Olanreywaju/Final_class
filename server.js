@@ -4,11 +4,14 @@ const express = require('express');
 const mongoose  = require('mongoose');
 const PORT = process.env.PORT || 1234
 const db = process.env.DATABASE_URI
-const userRouter = require('./routes/userRouter')
+const userRouter = require('./routes/userRouter');
+const productRouter = require('./routes/productRouter');
 
 const app = express();
 app.use(express.json());
 app.use("/api/v1/",userRouter);
+app.use("/api/v1/",productRouter);
+
 //app.use(cors());
 
 mongoose.connect(db).then(()=>{
